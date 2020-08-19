@@ -5,12 +5,15 @@ import json
 import time
 from datetime import datetime
 import csv
+import os
 
 first_kcb = True
 first_a = True
 date = ""
+totalShares = 4469
+dir = "d://pyData/xueqiu/"
 
-headers = {"Cookie": "xq_a_token=48575b79f8efa6d34166cc7bdc5abb09fd83ce63",
+headers = {"Cookie": "xq_a_token=69a6c81b73f854a856169c9aab6cd45348ae1299",
            "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.2 (KHTML, like Gecko) Chrome/22.0.1216.0"}
 
 
@@ -33,12 +36,12 @@ def get_shares_detail(symbol):
 def save_shares(bean: dict):
     if bean["symbol"].startswith("SH688"):
         # 科创板格式不一样单独保存一个
-        with open('d://pyData/xueqiu/%skcb.csv' % date, 'a', newline='') as file:
+        with open('%s%skcb.csv' % (dir, date), 'a', newline='') as file:
             global first_kcb
             b = save(bean, file, first_kcb)
             first_kcb = b
     else:
-        with open('d://pyData/xueqiu/%sa.csv' % date, 'a', newline='') as file:
+        with open('%s%sa.csv' % (dir, date), 'a', newline='') as file:
             global first_a
             b2 = save(bean, file, first_a)
             first_a = b2
@@ -58,13 +61,17 @@ def save(bean, file, first):
 
 
 if __name__ == '__main__':
+
+    if not os.path.exists(dir):
+        os.makedirs(name=dir, exist_ok=True)
+
     print("开始")
     start = int(time.time())
     date = datetime.now().strftime('%Y%m%d')
 
-    for page in range(1, math.ceil(3890 / 50) + 1):
-        if page == 3:
-            break
+    for page in range(1, math.ceil(totalShares / 50) + 1):
+        # if page == 20:
+        #     break
         # 获取列表
         shares_list = json.loads(get_shares_list(page))["data"]["list"]
         # 遍历
