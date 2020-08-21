@@ -17,8 +17,8 @@ def save(bean: dict):
 	try:
 		with connect.cursor() as cursor:
 			ss = """
-			insert into sharesdata (timestamp ,symbol,name, current, chg, percent, high, low, open, last_close, limit_up, limit_down) 
-			values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s); 
+			insert into sharesdata (timestamp ,symbol,name, current, chg, percent, high, low, open, last_close, limit_up, limit_down,volume,amount) 
+			values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s); 
 				"""
 			execute = cursor.execute(ss, [
 				bean['timestamp'],
@@ -33,6 +33,8 @@ def save(bean: dict):
 				bean['last_close'],
 				bean['limit_up'],
 				bean['limit_down'],
+				bean['volume'],
+				bean['amount'],
 			])
 			connect.commit()
 
