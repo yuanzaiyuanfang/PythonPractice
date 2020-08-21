@@ -8,7 +8,7 @@
 @time: 2018/1/20 09:50 
 """
 import pymysql
-import environment
+from shares import environment
 
 
 def save(bean: dict):

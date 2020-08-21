@@ -12,8 +12,8 @@ import time
 import math
 import json
 
-import datautil
-import save2db
+from shares.util import datautil
+from shares.save import save2db
 
 totalShares = 4469
 
@@ -21,6 +21,9 @@ if __name__ == '__main__':
 
 	print("开始")
 	start = int(time.time())
+	successNum = 0
+	failNum = 0
+	passNum = 0
 
 	for page in range(1, math.ceil(totalShares / 50) + 1):
 		# 获取列表
@@ -30,7 +33,8 @@ if __name__ == '__main__':
 		for shares in shares_list:
 			# 去掉没用的
 			symbol: str = shares["symbol"]
-			if symbol.startswith("SH171"):
+			if (symbol is None or symbol.startswith("SH171")):
+				passNum += 1
 				continue
 
 			# 获取详情
@@ -43,9 +47,16 @@ if __name__ == '__main__':
 			if data is not None:
 				try:
 					save2db.save(data["quote"])
+					successNum += 1
 				except:
+					failNum += 1
+					print("[%s][%s] 抓取失败" % (shares['name'], symbol))
 					continue
 
 			time.sleep(0.4)
 
 	print("耗时%d秒" % (int(time.time()) - start))
+	print("成功%d个" % successNum)
+	print("失败%d个" % failNum)
+	print("跳过%d个" % passNum)
+
