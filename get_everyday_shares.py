@@ -12,8 +12,8 @@ import time
 import math
 import json
 
-from shares.util import datautil
-from shares.save import save2db
+import save2db
+import datautil
 
 totalShares = 4469
 
@@ -48,9 +48,11 @@ if __name__ == '__main__':
 				try:
 					save2db.save(data["quote"])
 					successNum += 1
-				except:
+				except Exception as e:
 					failNum += 1
 					print("[%s][%s] 抓取失败" % (shares['name'], symbol))
+					print(repr(e))
+
 					continue
 
 			time.sleep(0.4)
@@ -59,4 +61,3 @@ if __name__ == '__main__':
 	print("成功%d个" % successNum)
 	print("失败%d个" % failNum)
 	print("跳过%d个" % passNum)
-

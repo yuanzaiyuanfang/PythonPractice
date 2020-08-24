@@ -8,7 +8,7 @@
 @time: 2018/1/20 09:50 
 """
 
-from shares.util import logutil
+from test import logutil
 
 if __name__ == '__main__':
 	logs = logutil.logs()
