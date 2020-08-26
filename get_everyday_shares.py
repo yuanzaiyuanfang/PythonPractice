@@ -46,7 +46,7 @@ if __name__ == '__main__':
 			data = sharesDetail.get("data")
 			if data is not None:
 				try:
-					save2db.save(data["quote"])
+					save2db.save(data["quote"], data["others"])
 					successNum += 1
 				except Exception as e:
 					failNum += 1
