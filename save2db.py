@@ -20,8 +20,8 @@ def save(bean: dict, others: dict):
 				save_list(cursor, bean)
 				save_detail(cursor, bean, others)
 			except Exception as e:
-				print(repr(e))
 				connect.rollback()
+				raise e
 			else:
 				connect.commit()
 
@@ -53,7 +53,6 @@ def save_list(cursor, bean):
 
 
 def save_detail(cursor, bean, others: dict):
-
 	ss = """
 	replace into sharedetail (symbol, name, current, chg, percent, high, low, open, last_close, limit_up, limit_down, volume,
                          amount, volume_ratio, pankou_ratio, turnover_rate, amplitude, pe_forecast, pe_lyr, pe_ttm, pb,
@@ -97,8 +96,8 @@ values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
 		bean['low52w'],
 		bean['currency'],
 		bean['goodwill_in_net_assets'],
-		bean['no_profit_desc'],
-		bean['is_registration_desc'],
-		bean['is_vie_desc'],
-		bean['weighted_voting_rights_desc'],
+		bean['no_profit_desc'] if ('no_profit_desc' in bean) else None,
+		bean['is_registration_desc'] if ('is_registration_desc' in bean) else None,
+		bean['is_vie_desc'] if ('is_vie_desc' in bean) else None,
+		bean['weighted_voting_rights_desc'] if ('weighted_voting_rights_desc' in bean) else None,
 	])
